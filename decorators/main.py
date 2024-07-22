@@ -7,10 +7,10 @@ def divide(a, b):
 
 
 @print_arguments
-def print_stuff(x, y, z):
+def print_stuff(x, y, *, z):
     print(x, y, z)
 
 
 division_result = divide(5, 0)
 
-print_stuff(1, 2, 3)
+print_stuff(1, 2, z=3)

@@ -19,8 +19,11 @@ def check_zero_division(function):
 def print_arguments(function):
     """Prints the arguments of the decorated function."""
     @wraps(function)
-    def wrapper(*args):
-        print(f'Arguments of function {function.__name__}: {args}')
-        return function(*args)
+    def wrapper(*args, **kwargs):
+        args_list = list(args)
+        args_list.extend([kwargs[key] for key in kwargs])
+
+        print(f'Arguments of function {function.__name__}: {args_list}')
+        return function(*args, **kwargs)
 
     return wrapper
