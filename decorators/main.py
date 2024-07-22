@@ -1,4 +1,4 @@
-from decorators import check_zero_division
+from decorators import check_zero_division, print_arguments
 
 
 @check_zero_division
@@ -6,6 +6,11 @@ def divide(a, b):
     return a / b
 
 
-result = divide(5, 0)
+@print_arguments
+def print_stuff(x, y, z):
+    print(x, y, z)
 
-print(result)
+
+division_result = divide(5, 0)
+
+print_stuff(1, 2, 3)

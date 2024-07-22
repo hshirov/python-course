@@ -14,3 +14,13 @@ def check_zero_division(function):
             return function(a, b)
 
     return wrapper
+
+
+def print_arguments(function):
+    """Prints the arguments of the decorated function."""
+    @wraps(function)
+    def wrapper(*args):
+        print(f'Arguments of function {function.__name__}: {args}')
+        return function(*args)
+
+    return wrapper
