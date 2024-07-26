@@ -6,9 +6,8 @@ from django.views import generic
 
 from .models import Question, Choice
 
-class IndexView(generic.ListView):
-    context_object_name = "latest_questions"
 
+class IndexView(generic.ListView):
     def get_queryset(self):
         return Question.objects.order_by("-pub_date")[:5]
     
@@ -27,7 +26,7 @@ def vote(request, question_id):
     try:
         selected_choice = question.choice_set.get(pk=request.POST["choice"])
     except (KeyError, Choice.DoesNotExist):
-        return render(request, "polls/detail.html", {
+        return render(request, "polls/question_detail.html", {
             "question": question,
             "error_message": "You didn't select a choice."
         })
