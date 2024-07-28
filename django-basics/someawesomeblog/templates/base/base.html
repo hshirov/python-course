@@ -4,6 +4,7 @@
         <title>{% block title %}{% endblock %} | SomeAwesomeBlog</title>
         {% load static %}
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+        {% block css %}{% endblock %}
     </head>
     <body>
         <div id="container">
