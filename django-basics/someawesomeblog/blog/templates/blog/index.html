@@ -3,5 +3,10 @@
 {% block title %}Log In{% endblock %}
 
 {% block content %}
+{% if username != None %}
+    <h2>Welcome, {{ username }}</h2>
+{% else %}
+    <h2>Home</h2>
+{% endif %}
 <h2>Home</h2>
 {% endblock %}
