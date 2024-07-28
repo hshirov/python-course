@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import SignUpForm
+from .decorators import anonymous_required
 
+
+@anonymous_required
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
@@ -14,6 +17,7 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'userauth/signup.html', {'form': form})
 
+@anonymous_required
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
