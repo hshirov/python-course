@@ -1,0 +1,19 @@
+* {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+}
+
+#container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.site-title a {
+    color: #616161;
+    text-decoration: none;
+}

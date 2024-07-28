@@ -1,15 +1,10 @@
 {% extends "base/base.html" %}
 
-{% block title %}Log In{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block content %}
 {% if username != None %}
     <h2>Welcome, {{ username }}</h2>
-
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
 {% else %}
     <h2>Welcome, stranger</h2>
 {% endif %}
