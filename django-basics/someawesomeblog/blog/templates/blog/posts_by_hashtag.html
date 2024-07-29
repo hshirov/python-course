@@ -6,12 +6,10 @@
 <link rel="stylesheet" type="text/css" href="{% static 'blog/css/post_list.css' %}">
 {% endblock %}
 
-{% block title %}Home{% endblock %}
+{% block title %}#{{ hashtag }}{% endblock %}
 
 {% block content %}
-{% if username != None %}
-    <h3 class="add-post"><a href="{% url 'create' %}">Add Post</a></h3>
-{% endif %}
+<h2>#{{ hashtag }}</h2>
 
 <ul>
     {% for post in post_list %}

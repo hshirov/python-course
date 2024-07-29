@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views import generic
 from .forms import CreatePostForm
-from .models import Post
+from .models import Post, Hashtag
 
 
 class IndexView(generic.ListView):
@@ -16,7 +16,21 @@ class IndexView(generic.ListView):
         context = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             context["username"] = self.request.user.username
+        return context
+    
 
+class HashtagPostsView(generic.ListView):
+    model = Post
+    paginate_by = 20
+    template_name = 'blog/posts_by_hashtag.html'
+
+    def get_queryset(self):
+        hashtag = get_object_or_404(Hashtag, name=self.kwargs.get('hashtag').lower())
+        return Post.objects.filter(hashtags=hashtag).order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["hashtag"] = self.kwargs.get('hashtag').lower()
         return context
 
 
