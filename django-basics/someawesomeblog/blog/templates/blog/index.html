@@ -1,9 +1,0 @@
-{% extends "base/base.html" %}
-
-{% block title %}Home{% endblock %}
-
-{% block content %}
-{% if username != None %}
-    <h3><a href="{% url 'create' %}">Add Post</a></h3>
-{% endif %}
-{% endblock %}

@@ -1,13 +1,24 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.views import generic
 from .forms import CreatePostForm
+from .models import Post
 
-def home(request):
-    context = {'username': None}
-    if request.user.is_authenticated:
-        context['username'] = request.user.username
 
-    return render(request, 'blog/index.html', context)
+class IndexView(generic.ListView):
+    model = Post
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Post.objects.order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context["username"] = self.request.user.username
+
+        return context
+
 
 @login_required(login_url='/auth/login/')
 def create_post(request):
