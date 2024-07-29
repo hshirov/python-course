@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'blog/css/post_list.css' %}">
@@ -17,7 +18,7 @@
     <li class="post-item">
         <div class="post-bubble">
             <h3>{{ post.title }}</h3>
-            <p>{{ post.text_content }}</p>
+            <p>{{ post.text_content|process_links|linebreaks }}</p>
         </div>
         <div class="post-info">
             <p class="date">{{ post.created_at|date:"F j, Y" }}</p>
