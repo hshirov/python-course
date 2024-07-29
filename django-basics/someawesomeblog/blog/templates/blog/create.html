@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'blog/css/style.css' %}">
+{% endblock %}
+
+{% block title %}Create Post{% endblock %}
+
+{% block content %}
+<h2>Add New Post</h2>
+<form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    <div>
+        {{ field }}
+        {% if field.errors %}
+            <div class="error">
+                {{ field.errors }}
+            </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+    <button type="submit">Create Post</button>
+</form>
+{% endblock %}

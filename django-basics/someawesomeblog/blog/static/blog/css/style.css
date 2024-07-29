@@ -4,9 +4,14 @@ main {
     align-items: center;
 }
 
-form {
+main form {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    width: 500px;
     gap: 8px;
+}
+
+main form textarea {
+    height: 280px;
+    max-height: 280px;
 }

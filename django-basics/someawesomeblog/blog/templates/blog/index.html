@@ -4,8 +4,6 @@
 
 {% block content %}
 {% if username != None %}
-    <h2>Welcome, {{ username }}</h2>
-{% else %}
-    <h2>Welcome, stranger</h2>
+    <h3><a href="{% url 'create' %}">Add Post</a></h3>
 {% endif %}
 {% endblock %}
