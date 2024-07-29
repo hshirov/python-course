@@ -13,7 +13,7 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    text_content = models.CharField(max_length=280)
+    text_content = models.CharField(max_length=500)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
