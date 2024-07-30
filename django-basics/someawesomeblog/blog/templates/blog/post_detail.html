@@ -15,4 +15,22 @@
 </div>
 <p>{{ post.text_content|process_links|process_hashtags|linebreaks }}</p>
 
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Comment</button>
+</form>
+
+<ul class="comment-list">
+{% for comment in comments %}
+    <li>
+        <div class="comment-content">
+            <b class="comment-author">{{ comment.author.username }}</b>
+            <p>{{ comment.text_content }}</p>
+            <p class="comment-date">{{ comment.created_at|date:"F j, Y" }}</p>
+        </div>
+    </li>
+{% endfor %}
+</ul>
 {% endblock %}

@@ -55,6 +55,7 @@ form textarea {
 
 form button {
     height: 32px;
+    padding: 0 10px;
     border: none;
     border: solid 1px #ccc;
     border-radius: 6px;

@@ -1,6 +1,6 @@
 import re
 from django import forms
-from .models import Post, Hashtag
+from .models import Post, Hashtag, Comment
 
 def extract_hashtags(text):
     """Extracts all hashtags from a string and returns them in a list."""
@@ -31,3 +31,11 @@ class CreatePostForm(forms.ModelForm):
                     hashtag, created = Hashtag.objects.get_or_create(name=tag_name)
                     post.hashtags.add(hashtag)
         return post
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text_content']
+        widgets = {'text_content': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Add a comment...'})}
+        labels = {'text_content': ''}
