@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views import generic
+from django.http import JsonResponse, HttpResponseBadRequest
 from .forms import CreatePostForm, CommentForm
-from .models import Post, Hashtag
+from .models import Post, Hashtag, Reaction
+from .utils import get_dict_with_reactions_count
+
+REACTION_TYPES = ('thumbs_up', 'thumbs_down')
 
 
 class IndexView(generic.ListView):
@@ -12,12 +16,6 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         return Post.objects.order_by('-created_at')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.user.is_authenticated:
-            context["username"] = self.request.user.username
-        return context
-    
 
 class HashtagPostsView(generic.ListView):
     model = Post
@@ -41,6 +39,7 @@ class PostDetail(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm()
         context['comments'] = self.object.comment_set.all()
+        context['reaction_counts'] = get_dict_with_reactions_count(self.object, REACTION_TYPES)
         return context
     
     def post(self, request, *args, **kwargs):
@@ -63,9 +62,25 @@ def create_post(request):
             post = form.save(commit=False)
             post.author = request.user
             form.save()
-
             return redirect('home')
     else:
         form = CreatePostForm()
 
     return render(request, 'blog/create.html', {'form': form})
+
+@login_required()
+def react_to_post(request, pk, reaction):
+    if reaction not in REACTION_TYPES:
+        return HttpResponseBadRequest()
+    
+    post = get_object_or_404(Post, pk=pk)
+    if post.reaction_set.filter(author=request.user, reaction_type=reaction).exists():
+        return JsonResponse(get_dict_with_reactions_count(post, REACTION_TYPES))
+    
+    other_reactions = post.reaction_set.filter(author=request.user).exclude(reaction_type=reaction)
+    if other_reactions.exists():
+        other_reactions.delete()
+
+    Reaction.objects.create(post=post, author=request.user, reaction_type=reaction)
+    return JsonResponse(get_dict_with_reactions_count(post, REACTION_TYPES))
+

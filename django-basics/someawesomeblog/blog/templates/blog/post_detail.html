@@ -15,6 +15,16 @@
 </div>
 <p>{{ post.text_content|process_links|process_hashtags|linebreaks }}</p>
 
+{% if user.is_authenticated %}
+<button id="like-button">
+    <b>+</b>
+    <span class="like-count">{{ reaction_counts.thumbs_up }}</span>
+</button>
+<button id="dislike-button">
+    <b>-</b>
+    <span class="dislike-count">{{ reaction_counts.thumbs_down }}</span>
+</button>
+{% endif %}
 
 <form method="post">
     {% csrf_token %}
@@ -33,4 +43,25 @@
     </li>
 {% endfor %}
 </ul>
+
+<script>
+    likeButton = document.getElementById('like-button');
+    dislikeButton = document.getElementById('dislike-button');
+    likeCount = document.querySelector('.like-count');
+    dislikeCount = document.querySelector('.dislike-count');
+
+    const handleReaction = async (reaction) => {
+        const res = await fetch(`/post/{{ object.id }}/${reaction}`);
+        const data = await res.json();
+        console.log(data)
+        likeCount.innerHTML = data.thumbs_up;
+        dislikeCount.innerHTML = data.thumbs_down;
+    };
+
+    const handleLike = () => handleReaction('thumbs_up');
+    const handleDislike = () => handleReaction('thumbs_down');
+
+    likeButton.addEventListener('click', handleLike);
+    dislikeButton.addEventListener('click', handleDislike);
+</script>
 {% endblock %}
