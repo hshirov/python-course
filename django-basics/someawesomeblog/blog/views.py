@@ -22,7 +22,7 @@ class IndexView(generic.ListView):
 class HashtagPostsView(generic.ListView):
     model = Post
     paginate_by = 20
-    template_name = 'blog/posts_by_hashtag.html'
+    template_name = 'blog/post_list.html'
 
     def get_queryset(self):
         hashtag = get_object_or_404(Hashtag, name=self.kwargs.get('hashtag').lower())
