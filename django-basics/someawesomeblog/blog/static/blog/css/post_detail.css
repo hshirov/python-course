@@ -1,0 +1,15 @@
+.post-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.post-header * {
+    margin: 0;
+}
+
+.post-author {
+    color: #7e7e7e;
+    font-size: 0.9rem;
+}

@@ -34,6 +34,10 @@ class HashtagPostsView(generic.ListView):
         return context
 
 
+class PostDetail(generic.DetailView):
+    model = Post
+
+
 @login_required(login_url='/auth/login/')
 def create_post(request):
     if request.method == 'POST':
