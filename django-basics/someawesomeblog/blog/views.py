@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views import generic
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden
 from .forms import CreatePostForm, CommentForm
 from .models import Post, Hashtag, Reaction
 from .utils import get_dict_with_reactions_count
@@ -43,6 +43,9 @@ class PostDetail(generic.DetailView):
         return context
     
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+
         self.object = self.get_object()
         form = CommentForm(request.POST)
         if form.is_valid():

@@ -24,13 +24,13 @@
     <b>-</b>
     <span class="dislike-count">{{ reaction_counts.thumbs_down }}</span>
 </button>
-{% endif %}
 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Add Comment</button>
 </form>
+{% endif %}
 
 <ul class="comment-list">
 {% for comment in comments %}
