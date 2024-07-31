@@ -21,7 +21,7 @@
     <span class="like-count">{{ reaction_counts.thumbs_up }}</span>
 </button>
 <button id="dislike-button">
-    <b>-</b>
+    <b>−</b>
     <span class="dislike-count">{{ reaction_counts.thumbs_down }}</span>
 </button>
 
@@ -30,6 +30,13 @@
     {{ form.as_p }}
     <button type="submit">Add Comment</button>
 </form>
+{% else %}
+<span>
+    <b>+</b> <span class="like-count">{{ reaction_counts.thumbs_up }}</span>
+</span>
+<span>
+    <b>−</b> <span class="dislike-count">{{ reaction_counts.thumbs_down }}</span>
+</span>
 {% endif %}
 
 <ul class="comment-list">
