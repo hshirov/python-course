@@ -21,6 +21,7 @@
     <h2>#{{ hashtag }}</h2>
 {% endif %}
 
+{% if post_list %}
 <ul>
     {% for post in post_list %}
     <li class="post-item">
@@ -35,7 +36,11 @@
     </li>
     {% endfor %}
 </ul>
+{% else %}
+<p>There are no posts here yet.</p>
+{% endif %}
 
+{% if post_list %}
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
@@ -53,4 +58,5 @@
         {% endif %}
     </span>
 </div>
+{% endif %}
 {% endblock %}
