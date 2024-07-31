@@ -6,7 +6,7 @@ from .forms import CreatePostForm, CommentForm
 from .models import Post, Hashtag, Reaction
 from .utils import get_dict_with_reactions_count
 
-REACTION_TYPES = ('thumbs_up', 'thumbs_down')
+REACTION_TYPES = [c[0] for c in Reaction.REACTION_CHOICES]
 
 
 class IndexView(generic.ListView):
@@ -86,4 +86,3 @@ def react_to_post(request, pk, reaction):
 
     Reaction.objects.create(post=post, author=request.user, reaction_type=reaction)
     return JsonResponse(get_dict_with_reactions_count(post, REACTION_TYPES))
-
