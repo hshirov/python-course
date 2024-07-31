@@ -21,6 +21,9 @@ class Post(models.Model):
     
     def get_reaction_count(self, reaction_type):
         return self.reaction_set.filter(reaction_type=reaction_type).count()
+    
+    def get_comment_count(self):
+        return self.comment_set.count()
 
 
 class Comment(models.Model):

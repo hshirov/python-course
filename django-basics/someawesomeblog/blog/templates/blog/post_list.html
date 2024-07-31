@@ -29,7 +29,7 @@
             <p>{{ post.text_content|process_links|process_hashtags|linebreaks }}</p>
         </div>
         <div class="post-info">
-            <p class="date">{{ post.created_at|date:"F j, Y" }}</p>
+            <p class="date">{{ post.get_comment_count }} comments • {{ post.created_at|date:"F j, Y" }}</p>
             <p class="author">{{ post.author.username }}</p>
         </div>
     </li>
