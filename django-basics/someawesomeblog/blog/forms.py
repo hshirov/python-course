@@ -20,9 +20,7 @@ class CreatePostForm(forms.ModelForm):
     def save(self, commit=True):
         post = super().save(commit=False)
         hashtags = extract_hashtags(self.cleaned_data['text_content'])
-
         if commit:
-            print('Commit')
             post.save()
             post.hashtags.clear()
             for tag in hashtags:
