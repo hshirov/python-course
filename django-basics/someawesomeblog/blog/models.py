@@ -17,6 +17,9 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     hashtags = models.ManyToManyField(Hashtag, blank=True, related_name='posts')
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return self.title
     

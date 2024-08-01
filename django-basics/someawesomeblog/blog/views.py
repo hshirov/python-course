@@ -13,9 +13,6 @@ class IndexView(generic.ListView):
     model = Post
     paginate_by = 20
 
-    def get_queryset(self):
-        return Post.objects.order_by('-created_at')
-
 
 class HashtagPostsView(generic.ListView):
     model = Post
@@ -24,7 +21,7 @@ class HashtagPostsView(generic.ListView):
 
     def get_queryset(self):
         hashtag = get_object_or_404(Hashtag, name=self.kwargs.get('hashtag').lower())
-        return hashtag.posts.order_by('-created_at')
+        return hashtag.posts.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
