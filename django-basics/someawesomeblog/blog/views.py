@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import generic
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseForbidden
 from .forms import CreatePostForm, CommentForm
-from .models import Post, Hashtag, Reaction
+from .models import Post, Reaction
 from .utils import get_dict_with_reactions_count
 
 REACTION_TYPES = [c[0] for c in Reaction.REACTION_CHOICES]
@@ -20,8 +20,7 @@ class HashtagPostsView(generic.ListView):
     template_name = 'blog/post_list.html'
 
     def get_queryset(self):
-        hashtag = get_object_or_404(Hashtag, name=self.kwargs.get('hashtag').lower())
-        return hashtag.posts.all()
+        return Post.objects.filter(hashtags__name=self.kwargs.get('hashtag').lower())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
