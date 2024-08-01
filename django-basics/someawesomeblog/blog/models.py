@@ -11,7 +11,7 @@ class Hashtag(models.Model):
 
 class Post(models.Model):
     title = models.CharField(max_length=255)
-    text_content = models.CharField(max_length=1000)
+    text_content = models.TextField(max_length=1000)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     hashtags = models.ManyToManyField(Hashtag, blank=True)
@@ -27,7 +27,7 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    text_content = models.CharField(max_length=500)
+    text_content = models.TextField(max_length=500)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
