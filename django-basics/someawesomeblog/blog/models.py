@@ -31,11 +31,16 @@ class Post(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        hashtags = extract_hashtags(self.text_content)
-        for tag in hashtags:
-            tag_name = tag.lower()
-            hashtag, created = Hashtag.objects.get_or_create(name=tag_name)
-            self.hashtags.add(hashtag)
+
+        hashtags = {tag.lower() for tag in extract_hashtags(self.text_content)}
+        existing_hashtags = Hashtag.objects.filter(name__in=hashtags)
+        existing_hashtag_names = existing_hashtags.values_list('name', flat=True)
+
+        new_hashtags = [Hashtag(name=tag) for tag in hashtags if tag not in existing_hashtag_names]
+        Hashtag.objects.bulk_create(new_hashtags)
+
+        all_hashtags = list(existing_hashtags) + new_hashtags
+        self.hashtags.set(all_hashtags)
 
 
 class Comment(models.Model):
