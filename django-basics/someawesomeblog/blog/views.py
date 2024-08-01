@@ -24,7 +24,7 @@ class HashtagPostsView(generic.ListView):
 
     def get_queryset(self):
         hashtag = get_object_or_404(Hashtag, name=self.kwargs.get('hashtag').lower())
-        return Post.objects.filter(hashtags=hashtag).order_by('-created_at')
+        return hashtag.posts.order_by('-created_at')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -38,7 +38,7 @@ class PostDetail(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = CommentForm()
-        context['comments'] = self.object.comment_set.all()
+        context['comments'] = self.object.comments.all()
         context['reaction_counts'] = get_dict_with_reactions_count(self.object, REACTION_TYPES)
         return context
     
@@ -77,10 +77,10 @@ def react_to_post(request, pk, reaction):
         return HttpResponseBadRequest()
     
     post = get_object_or_404(Post, pk=pk)
-    if post.reaction_set.filter(author=request.user, reaction_type=reaction).exists():
+    if post.reactions.filter(author=request.user, reaction_type=reaction).exists():
         return JsonResponse(get_dict_with_reactions_count(post, REACTION_TYPES))
     
-    other_reactions = post.reaction_set.filter(author=request.user).exclude(reaction_type=reaction)
+    other_reactions = post.reactions.filter(author=request.user).exclude(reaction_type=reaction)
     if other_reactions.exists():
         other_reactions.delete()
 

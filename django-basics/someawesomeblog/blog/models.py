@@ -13,18 +13,18 @@ class Hashtag(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=255)
     text_content = models.TextField(max_length=1000)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
-    hashtags = models.ManyToManyField(Hashtag, blank=True)
+    hashtags = models.ManyToManyField(Hashtag, blank=True, related_name='posts')
 
     def __str__(self):
         return self.title
     
     def get_reaction_count(self, reaction_type):
-        return self.reaction_set.filter(reaction_type=reaction_type).count()
+        return self.reactions.filter(reaction_type=reaction_type).count()
     
     def get_comment_count(self):
-        return self.comment_set.count()
+        return self.comments.count()
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -37,7 +37,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     text_content = models.TextField(max_length=500)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -51,7 +51,7 @@ class Reaction(models.Model):
         ('thumbs_down', 'Thumbs Down'),
     ]
 
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='reactions')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     reaction_type = models.CharField(max_length=11, choices=REACTION_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
