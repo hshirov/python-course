@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .utils import extract_hashtags
 
 
 class Hashtag(models.Model):
@@ -24,6 +25,14 @@ class Post(models.Model):
     
     def get_comment_count(self):
         return self.comment_set.count()
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        hashtags = extract_hashtags(self.text_content)
+        for tag in hashtags:
+            tag_name = tag.lower()
+            hashtag, created = Hashtag.objects.get_or_create(name=tag_name)
+            self.hashtags.add(hashtag)
 
 
 class Comment(models.Model):
