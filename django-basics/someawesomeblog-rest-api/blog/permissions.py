@@ -19,3 +19,11 @@ class IsAuthorOrAdminOrReadOnly(permissions.BasePermission):
             return True
         
         return False
+
+
+class CommentsCustomPermissions(IsAuthorOrAdminOrReadOnly):
+    def has_object_permission(self, request, view, obj):
+        if request.method == 'DELETE' and request.user == obj.post.author:
+            return True
+
+        return super().has_object_permission(request, view, obj)
