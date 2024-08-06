@@ -1,6 +1,6 @@
-from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('auth/', include('rest_framework.urls')),
+    path('auth/', include('userauth.urls')),
+    path('api-auth/', include('rest_framework.urls')),
 ]
