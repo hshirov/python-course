@@ -1,10 +1,9 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework import permissions
-from .models import Post, Comment
-from .serializers import PostSerializer, CommentSerializer
-from .permissions import IsAuthorOrAdminOrReadOnly, CommentsCustomPermissions
+from .models import Post, Comment, Hashtag
+from .serializers import PostSerializer, CommentSerializer, HashtagSerializer
+from .permissions import IsAuthorOrAdminOrReadOnly, CommentsCustomPermissions, IsAdminOrReadOnly
 from .mixins import SaveAuthorMixin
 
 
@@ -25,3 +24,11 @@ class CommentViewSet(SaveAuthorMixin, viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [CommentsCustomPermissions]
 
+
+class HashtagViewSet(mixins.RetrieveModelMixin,
+                     mixins.ListModelMixin,
+                     mixins.DestroyModelMixin,
+                     viewsets.GenericViewSet):
+    queryset = Hashtag.objects.all()
+    serializer_class = HashtagSerializer
+    permission_classes = [IsAdminOrReadOnly]
