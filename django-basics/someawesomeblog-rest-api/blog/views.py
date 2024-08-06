@@ -30,10 +30,11 @@ class HashtagViewSet(mixins.ListModelMixin,
                      viewsets.GenericViewSet):
     queryset = Hashtag.objects.all()
     serializer_class = HashtagSerializer
-    permission_classes = [custom_permissions.IsAdminOrReadOnly]
+    permission_classes = [permissions.IsAdminUser]
 
 
 class ReactionViewSet(SaveAuthorMixin,
+                      mixins.ListModelMixin,
                       mixins.CreateModelMixin,
                       mixins.DestroyModelMixin,
                       viewsets.GenericViewSet):

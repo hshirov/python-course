@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 
-class IsAdminOrReadOnly(permissions.BasePermission):
+class IsAuthorOrAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
@@ -15,15 +15,10 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         if request.user and request.user.is_staff:
             return True
         
-        return False
-
-
-class IsAuthorOrAdminOrReadOnly(IsAdminOrReadOnly):
-    def has_object_permission(self, request, view, obj):
         if request.user == obj.author:
             return True
 
-        return super().has_object_permission(request, view, obj)
+        return False
 
 
 class CommentsCustomPermissions(IsAuthorOrAdminOrReadOnly):
@@ -34,9 +29,15 @@ class CommentsCustomPermissions(IsAuthorOrAdminOrReadOnly):
         return super().has_object_permission(request, view, obj)
     
 
-class ReactionsCustomPermissions(permissions.BasePermission):
+class ReactionsCustomPermissions(permissions.BasePermission):    
     def has_permission(self, request, view):
-        return request.user and request.user.is_authenticated
+        if not request.user:
+            return False
+    
+        if request.method == 'GET' and not request.user.is_staff:
+            return False
+
+        return request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):         
         if request.user == obj.author:
