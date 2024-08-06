@@ -5,11 +5,13 @@ from . import permissions as custom_permissions
 from .models import Post, Comment, Hashtag, Reaction
 from .serializers import PostSerializer, CommentSerializer, HashtagSerializer, ReactionSerializer
 from .mixins import SaveAuthorMixin
+from .filters import PostFilter
 
 
 class PostViewSet(SaveAuthorMixin, viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    filterset_class = PostFilter
     permission_classes = [custom_permissions.IsAuthorOrAdminOrReadOnly]
 
     @action(detail=True, methods=['get'], permission_classes=[permissions.AllowAny])
