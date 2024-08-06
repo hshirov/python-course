@@ -67,3 +67,9 @@ class Reaction(models.Model):
 
     def __str__(self):
         return f'{self.reaction_type} by {self.author.username} on {self.post.title}'
+    
+    def save(self, *args, **kwargs):
+        old_reaction = Reaction.objects.filter(author=self.author, post=self.post)
+        if old_reaction.exists():
+            old_reaction.delete()
+        super().save(*args, **kwargs)
