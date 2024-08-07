@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Post, Comment, Hashtag, Reaction
+from .utils import extract_hashtags
 
 REACTION_TYPES = [c[0] for c in Reaction.REACTION_CHOICES]
 
@@ -10,7 +11,14 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'text_content', 'reaction_counts', 'author', 'created_at',]
+        fields = ['id', 'title', 'text_content', 'reaction_counts', 'author', 'created_at']
+
+    def validate(self, data):
+        text = data.get('text_content')
+        hashtags = {tag.lower() for tag in extract_hashtags(text)}
+        if len(hashtags) > 10:
+            raise serializers.ValidationError('You can only add 10 hashtags per post.')
+        return data
 
     def get_reaction_counts(self, obj):
         # TODO: Optimize
