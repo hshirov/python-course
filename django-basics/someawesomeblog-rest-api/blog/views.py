@@ -1,6 +1,8 @@
 from rest_framework import viewsets, permissions, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from . import permissions as custom_permissions
 from .models import Post, Comment, Hashtag, Reaction
 from .serializers import PostSerializer, CommentSerializer, HashtagSerializer, ReactionSerializer
@@ -11,8 +13,10 @@ from .filters import PostFilter
 class PostViewSet(SaveAuthorMixin, viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = PostFilter
     permission_classes = [custom_permissions.IsAuthorOrAdminOrReadOnly]
+    ordering_fields = ['created_at']
 
     @action(detail=True, methods=['get'], permission_classes=[permissions.AllowAny])
     def comments(self, request, *args, **kwargs):
