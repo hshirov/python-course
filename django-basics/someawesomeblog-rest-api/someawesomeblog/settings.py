@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0']
 
+RUNNING_IN_DOCKER = os.environ.get('RUNNING_IN_DOCKER') == 'true'
+
 
 # Application definition
 
@@ -88,7 +90,7 @@ WSGI_APPLICATION = 'someawesomeblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if (os.environ.get('POSTGRES_NAME')):
+if RUNNING_IN_DOCKER:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
