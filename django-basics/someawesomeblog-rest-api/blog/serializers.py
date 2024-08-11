@@ -52,10 +52,10 @@ class ReactionSerializer(serializers.ModelSerializer):
         fields = ['id', 'reaction_type', 'post', 'author', 'created_at']
 
     def validate(self, data):
-        author = self.context.get('author')
+        request = self.context.get('request')
         post = data.get('post')
         reaction_type = data.get('reaction_type')
         
-        if Reaction.objects.filter(author=author, post=post, reaction_type=reaction_type).exists():
+        if Reaction.objects.filter(author=request.user, post=post, reaction_type=reaction_type).exists():
             raise serializers.ValidationError('A user can only have one reaction per post.')
         return data

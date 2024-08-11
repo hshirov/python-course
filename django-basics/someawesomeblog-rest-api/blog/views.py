@@ -58,8 +58,3 @@ class ReactionViewSet(SaveAuthorMixin,
     queryset = Reaction.objects.all()
     serializer_class = ReactionSerializer
     permission_classes = [custom_permissions.ReactionsCustomPermissions]
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        context['author'] = self.request.user
-        return context
