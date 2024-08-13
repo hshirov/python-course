@@ -1,4 +1,3 @@
-from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import PostViewSet, CommentViewSet, HashtagViewSet, ReactionViewSet
 
@@ -8,6 +7,4 @@ router.register(r'comments', CommentViewSet, basename='comment')
 router.register(r'hashtags', HashtagViewSet, basename='hashtag')
 router.register(r'reactions', ReactionViewSet, basename='reaction')
 
-urlpatterns = [
-    path('', include(router.urls))
-]
+urlpatterns = router.urls
