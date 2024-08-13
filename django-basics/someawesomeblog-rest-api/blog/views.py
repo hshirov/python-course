@@ -1,11 +1,11 @@
-from rest_framework import viewsets, permissions, mixins
+from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from . import permissions as custom_permissions
 from .models import Post, Comment, Hashtag, Reaction
 from .serializers import PostSerializer, CommentSerializer, HashtagSerializer, ReactionSerializer
-from .mixins import SaveAuthorMixin
+from .mixins import SaveAuthorMixin, ListDestroyViewset, ListCreateDestroyViewset
 from .filters import PostFilter, PostSearchFilter
 from .decorators import paginate
 
@@ -38,19 +38,13 @@ class CommentViewSet(SaveAuthorMixin, viewsets.ModelViewSet):
     permission_classes = [custom_permissions.CommentsCustomPermissions]
 
 
-class HashtagViewSet(mixins.ListModelMixin,
-                     mixins.DestroyModelMixin,
-                     viewsets.GenericViewSet):
+class HashtagViewSet(ListDestroyViewset):
     queryset = Hashtag.objects.all()
     serializer_class = HashtagSerializer
     permission_classes = [permissions.IsAdminUser]
 
 
-class ReactionViewSet(SaveAuthorMixin,
-                      mixins.ListModelMixin,
-                      mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin,
-                      viewsets.GenericViewSet):
+class ReactionViewSet(SaveAuthorMixin, ListCreateDestroyViewset):
     queryset = Reaction.objects.all()
     serializer_class = ReactionSerializer
     permission_classes = [custom_permissions.ReactionsCustomPermissions]
