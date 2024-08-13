@@ -1,6 +1,8 @@
 import pytest
 from django.contrib.auth.models import User
+from rest_framework import status
 from blog.models import Post
+
 
 @pytest.mark.django_db
 class TestPostView:
@@ -22,3 +24,19 @@ class TestPostView:
         assert response.status_code == 200
         assert count == 2
         assert results[0].get('title') == 'Test Post 2'
+    
+    def test_unauthenticated_user_cannot_create_post(self, api_client):
+        data = {'title': 'Test Post', 'content': 'Test Content'}
+        response = api_client.post('/posts/', data)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+    
+    def test_authenticated_user_can_create_post(self, api_client):
+        user = User.objects.create_user(username='testuser', password='password')
+        api_client.force_authenticate(user=user)
+
+        data = {'title': 'Test Post', 'text_content': 'Test Content'}
+        response = api_client.post('/posts/', data)
+
+        assert response.status_code == status.HTTP_201_CREATED
+        assert Post.objects.count() == 1
